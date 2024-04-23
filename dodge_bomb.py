@@ -28,12 +28,23 @@ def check_bound(obj_rct:pg.Rect) -> tuple[bool, bool]:
     return yoko, tate
 
 
-
+def bomb_control(t):
+    '''
+    爆弾の加速度，拡大率選択用の関数
+    引数：tmr
+    戻り値：加速度，拡大率の順のタプル
+    '''
+    accs = [a for a in range(1, 11)]
+    bomb_big = [b*20 for b in range(1, 11)]
+    u = t // 100
+    return (accs[u], bomb_big[u])
 
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
+    tmr = 0
+    rate = bomb_control(tmr)  # bomb_controlの値を受け取る変数
     # こうかとんの設定
     bg_img = pg.image.load("fig/pg_bg.jpg")    
     kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2.0)
@@ -41,15 +52,15 @@ def main():
     kk_rct.center = 900, 400
     # 爆弾の設定
     bomb_img = pg.Surface((20, 20))
+    pg.draw.circle(bomb_img, (255, 0, 0), (10, 10), rate[1])
     bomb_img.set_colorkey((0, 0, 0))
-    pg.draw.circle(bomb_img, (255, 0, 0), (10, 10), 10)
     bomb_rct = bomb_img.get_rect()
     bomb_rct.center = random.randint(0, WIDTH), random.randint(0, HEIGHT)
-    vx, vy = +5, +5
+    vx = 5 * rate[0]
+    vy = 5 * rate[0]
 
 
     clock = pg.time.Clock()
-    tmr = 0
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
@@ -80,6 +91,7 @@ def main():
             vy *= -1
         pg.display.update()
         tmr += 1
+        
         clock.tick(50)
 
 
