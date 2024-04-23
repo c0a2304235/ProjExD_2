@@ -21,11 +21,14 @@ def check_bound(obj_rct:pg.Rect) -> tuple[bool, bool]:
     戻り値：横方向判定結果，縦方向判定結果 (True: 画面内/False：画面内)
     '''
     yoko, tate = True, True
-    if obj_rct.left < 0 or WIDTH < obj_rct.right:
+    if obj_rct.left <= 0 or WIDTH <= obj_rct.right:
         yoko = False
-    if obj_rct.top < 0 or HEIGHT < obj_rct.bottom:
+    if obj_rct.top <= 0 or HEIGHT <= obj_rct.bottom:
         tate = False
     return yoko, tate
+
+
+
 
 
 def main():
@@ -51,6 +54,9 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
+        if kk_rct.colliderect(bomb_rct):
+            print("Game Over")
+            return
         screen.blit(bg_img, [0, 0]) 
 
         # こうかとんの描画
