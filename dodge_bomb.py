@@ -34,9 +34,9 @@ def bomb_control(t):
     引数：tmr
     戻り値：加速度，拡大率の順のタプル
     '''
-    accs = [a for a in range(1, 11)]
-    bomb_big = [b*20 for b in range(1, 11)]
-    u = t // 100
+    accs = [a for a in range(1, 11)]  # 加速度のリスト
+    bomb_big = [b*20 for b in range(1, 11)]  # 拡大に用いるリスト
+    u = t // 100  # 時間経過の計算
     return (accs[u], bomb_big[u])
 
 
@@ -44,12 +44,14 @@ def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     tmr = 0
-    rate = bomb_control(tmr)  # bomb_controlの値を受け取る変数
+    rate = bomb_control(tmr)  # 関数bomb_controlの値を受け取る変数
+
     # こうかとんの設定
     bg_img = pg.image.load("fig/pg_bg.jpg")    
     kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2.0)
     kk_rct = kk_img.get_rect()
     kk_rct.center = 900, 400
+
     # 爆弾の設定
     bomb_img = pg.Surface((20, 20))
     pg.draw.circle(bomb_img, (255, 0, 0), (10, 10), rate[1])
@@ -65,7 +67,7 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
-        if kk_rct.colliderect(bomb_rct):
+        if kk_rct.colliderect(bomb_rct):  # こうかとんが爆弾とぶつかったら
             print("Game Over")
             return
         screen.blit(bg_img, [0, 0]) 
@@ -90,8 +92,8 @@ def main():
         if not tate:  # 縦方向にはみ出たら
             vy *= -1
         pg.display.update()
-        tmr += 1
         
+        tmr += 1
         clock.tick(50)
 
 
